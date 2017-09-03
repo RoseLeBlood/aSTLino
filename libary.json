@@ -1,0 +1,19 @@
+{
+"name": "aSTL Arduino",
+"frameworks": "Arduino",
+"keywords": "STL, C++, std",
+"description": "Alternive Template Libary",
+"authors":
+[
+    {
+        "name": "Anna-Sophia Schroeck",
+        "email": "pba3h11aso@t-online.de",
+        "maintainer": true
+    },
+],
+"repository":
+{
+    "type": "git",
+    "url": "https://github.com/RoseLeBlood/aSTLino/"
+}
+}
