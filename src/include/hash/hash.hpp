@@ -36,9 +36,11 @@
 #include "bernstein.hpp"
 #include "fletcher.hpp"
 #include "crc32.hpp"
+#include "crc16.hpp"
 #include "fnv1a.hpp"
 #include "ramakrishna.hpp"
 #include "weinberg.hpp"
+
 
 #include "../singleton.hpp"
 
@@ -53,6 +55,9 @@ namespace std {
     using crc32_t = crc32<0x04c11db7>;
     using crc32_k = crc32<0x741B8CD7>;
     using crc32_q = crc32<0x814141AB>;
+
+    using crc16_t = crc16<0xA001>;
+    using crc16_c = crc16<0x9021>;
     
     using default_hasher = ASSTL_HASH_DEFAULT;
     
