@@ -47,10 +47,11 @@ namespace std {
             unsigned char* current = (unsigned char*) data;
 
             for(uint32_t i = 0; i < length; i++) {                
-                crc = m_lookuptable[(crc ^ current[i]) & 0xFF] ^ (crc >> 8);
+                crc = m_lookuptable[(crc ^ current[i]) & 0x0F] ^ (crc >> 4);
+                crc = m_lookuptable[(crc ^ (current[i] >> 4)) & 0x0F] ^ (crc >> 4);
             }
 
-            return ~crc; 
+            return crc; 
         }
          const char* get_name() { return "crc32"; }
     private:
