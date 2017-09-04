@@ -219,22 +219,22 @@ namespace std {
     using fuint8_t = fast_type<8, uint8_t>;
     using fuint16_t = fast_type<16, uint16_t>;
     using fuint32_t = fast_type<32, uint32_t>;
-    using fuint64_t = fast_type<64, uint64_t>;
+    //using fuint64_t = fast_type<64, uint64_t>;
     
-    using fuint_least8_t = fast_type<8, fuint_least8_t>;
-    using fuint_least16_t = fast_type<16, fuint_least16_t>;
-    using fuint_least32_t = fast_type<32, fuint_least32_t>;
-    using fuint_least64_t = fast_type<64, fuint_least64_t>;
+    using fuint_least8_t = fast_type<8, uint_least8_t>;
+    using fuint_least16_t = fast_type<16, uint_least16_t>;
+    using fuint_least32_t = fast_type<32, uint_least32_t>;
+    //using fuint_least64_t = fast_type<64, fuint_least64_t>;
     
     using fint8_t = fast_type<8,   int8_t>;
     using fint16_t = fast_type<16, int16_t>;
     using fint32_t = fast_type<32, int32_t>;
-    using fint64_t = fast_type<64, int64_t>;
+    //using fint64_t = fast_type<64, int64_t>;
     
-    using fint_least8_t = fast_type<8, fint_least8_t>;
-    using fint_least16_t = fast_type<16, fint_least16_t>;
-    using fint_least32_t = fast_type<32, fint_least32_t>;
-    using fint_least64_t = fast_type<64, fint_least64_t>;
+    using fint_least8_t = fast_type<8, int_least8_t>;
+    using fint_least16_t = fast_type<16, int_least16_t>;
+    using fint_least32_t = fast_type<32, int_least32_t>;
+    //using fint_least64_t = fast_type<64, fint_least64_t>;
     
 }
 
