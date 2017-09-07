@@ -23,47 +23,36 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   adler32.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 5. Dezember 2016, 04:12
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
+#ifndef ADLER32_HPP
+#define ADLER32_HPP
+
+
 namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+    template <uint32_t TMod = 65521>
+    class adler32 {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
-        }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
+        static constexpr uint32_t default_value = 0;
+        
+        uint32_t hash(const char* data, size_t length, uint32_t old = 0) {
+           uint32_t a = 1, b = 0;
+           size_t iLen;
            
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
+           while(iLen < length) {
+               a = (a + (char)data[++iLen]) % TMod;
+               b = (b + a) % TMod; 
+           }
+           return (b << 16) | a;
         }
-        const char* get_name() { return "crc16"; }
-    private:
-        unsigned long m_lookuptable[16];
+        const char* get_name() { return "adler32"; }
     };
-    
 }
 
-#endif /* CRC32_HPP */
+
+#endif /* ADLER32_HPP */
 

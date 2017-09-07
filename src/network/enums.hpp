@@ -23,33 +23,60 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   enums.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 11. Mai 2017, 16:19
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef ENUMS_HPP
+#define ENUMS_HPP
 
 namespace std {
     namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
-
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
+        enum class ProcType {
+            Unknown = -1,
+            IP = 0,
+            ICMP = 1,
+            IGMP = 2,
+            IPv4 = 4,
+            TCP = 6,
+            UDP = 17,
+            IDP = 22,
+            IPv6 = 41,
+            IPv6RoutingHeader = 43,
+            IPv6FragmentHeader = 44,
+            IcmpV6 = 58,
+            IPv6NoNextHeader = 59,
+            IPv6DestinationOptions = 60,
+            
+            User = 255
+        };
+        enum class AddrFamily {
+            Unknown =-1,
+            null = 0,
+            Unix = 1,
+            Internet = 2,
+            InternetV6 = 23,
+            ArpaNet = 3,
+            IrDa = 4,
+        };
+        enum class SocketTyp {
+            Stream,
+            Dgram,
+            Raw,
+            Rdm,
+            Seqpacket,
+            Other
+        };
+        enum class SocketInformationOptions {
+            NonBlocking = 0x1,
+            Conected = 0x2,
+            Listing = 0x4,
+            UseOnlyOverlappedIO = 0x8
+        };
     }
 }
+
+#endif /* ENUMS_HPP */
+

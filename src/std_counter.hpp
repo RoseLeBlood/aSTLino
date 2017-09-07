@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 annas.
+ * Copyright 2017 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,43 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   std_counter.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 18. April 2017, 20:46
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
+#ifndef STD_COUNTER_HPP
+#define STD_COUNTER_HPP
+
+#include "lock_ptr.hpp"
+
 namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+    ///@brief safe counter is a base of thread saftly counter 
+    class safe_counter {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
+        ///@param start Start value of this counter 
+        explicit safe_counter(int start = 0) : m_iCount(start) {}
+        ///@brief thread saftly increment operator
+        safe_counter& operator ++() {
+            ++(*lock_ptr<int>(m_iCount, m_mutex));
+            return *this;
         }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
+        ///@brief thread saftly decrement operator
+        safe_counter& operator --() {
+            --(*lock_ptr<int>(m_iCount, m_mutex));
+            return *this;
         }
-        const char* get_name() { return "crc16"; }
-    private:
-        unsigned long m_lookuptable[16];
+        ///@brief get the current count
+        int32_t count() {
+            return *lock_ptr<int>(m_iCount, m_mutex);
+        }
+    protected:
+        alock m_mutex;
+        volatile int m_iCount; 
     };
-    
 }
 
-#endif /* CRC32_HPP */
+
+#endif /* STD_COUNTER_HPP */
 

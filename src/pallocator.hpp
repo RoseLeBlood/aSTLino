@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 annas.
+ * Copyright 2017 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,46 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   pallocator.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 22. April 2017, 23:35
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
+#ifndef PALLOCATOR_HPP
+#define PALLOCATOR_HPP
+
+#include "memory/palloc.h"
+
 namespace std {
     
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+    class pallocator {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
+	explicit allocator(const char* name = "palloc") : m_name(name) {}
+	~allocator() {}
+        
+        virtual void* allocate(unsigned int bytes, int flags = 0) {
+            unsigned bnum = (unsigned) ((bytes + 1) / (PALLOC_SIZE * 1024)) + 1; 
+            return palloc(bnum);
         }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
+        virtual void* allocate_aligned(unsigned int bytes, unsigned int alignment, int flags = 0) {
+            return 0;
         }
-        const char* get_name() { return "crc16"; }
+	virtual void deallocate(void* ptr, unsigned int bytes) {
+            return pfree(ptr);
+        }
+	const char* get_name() const { return m_name; }
     private:
-        unsigned long m_lookuptable[16];
+        const char* m_name;
     };
-    
+    inline bool operator==(const pallocator& lhs, const pallocator& rhs) {
+	return !strcmp(lhs.get_name(), rhs.get_name());
+    }
+    inline bool operator!=(const pallocator& lhs, const pallocator& rhs) {
+	return !(lhs == rhs);
+    }
+
 }
 
-#endif /* CRC32_HPP */
+#endif /* PALLOCATOR_HPP */
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 annas.
+ * Copyright 2016 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,46 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   functional.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 7. November 2016, 00:56
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef _STD_FUNCTIONAL_H_
+#define _STD_FUNCTIONAL_H_
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
+namespace std
+{
+	template<typename T> struct less
+	{
+	        bool operator()(const T& lhs, const T& rhs) const
+	        {
+	                return lhs < rhs;
+	        }
+	};
+	template<typename T> struct greater
+	{
+	        bool operator()(const T& lhs, const T& rhs) const
+	        {
+	                return lhs > rhs;
+	        }
+	};
+	template<typename T> struct equal_to
+	{
+	        bool operator()(const T& lhs, const T& rhs) const
+	        {
+	                return lhs == rhs;
+	        }
+	};
+        template <typename T> T nexthigher(T k) 
+        {
+            k--;
+            for (unsigned int i=1; i< sizeof(T) * 8; i <<= 1)
+                k |= (k >> i);
+            return k+1;
         }
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
-    }
+
 }
+#endif 

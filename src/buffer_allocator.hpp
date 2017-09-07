@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 annas.
+ * Copyright 2016 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,50 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   buffer_allocator.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 7. November 2016, 00:39
  */
 
-#include "network/physicaladdress.hpp"
+#ifndef _STD_BUFFER_ALLOCATOR_H_
+#define _STD_BUFFER_ALLOCATOR_H_
+
 #include "common.hpp"
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
+namespace std
+{
+	class buffer_allocator 
+	{
+	public:
+	        explicit buffer_allocator(const char* name, char* mem, size_t bufferSize)
+	        	: m_name(name), m_buffer(mem), m_bufferTop(0), m_bufferSize(bufferSize)
+	        {
+	        }
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
-    }
+	        void* allocate(size_t bytes, int flags = 0)
+	        {
+	                assert(m_bufferTop + bytes <= m_bufferSize);
+	                char* ret = m_buffer + m_bufferTop;
+	                m_bufferTop += bytes;
+	                return ret;
+	        }
+	        void deallocate(void* ptr, size_t bytes)
+	        {
+	                assert(ptr == 0 || (ptr >= m_buffer && ptr < m_buffer + m_bufferSize));
+	                sizeof(ptr);
+	        }
+
+	        const char* get_name() const    { return m_name; }
+
+	private:
+	        const char*     m_name;
+	        char*           m_buffer;
+	        size_t          m_bufferTop;
+	        size_t          m_bufferSize;
+	};
 }
+#endif 
+
+
+

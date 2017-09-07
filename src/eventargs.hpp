@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 annas.
+ * Copyright 2017 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,47 +23,25 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   eventargs.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 9. Mai 2017, 00:01
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
+#ifndef EVENTARGS_HPP
+#define EVENTARGS_HPP
+
+#include "unknown.hpp"
+
 namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+    class eventArgs : public object {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
+        eventArgs() {
+            
         }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
-        }
-        const char* get_name() { return "crc16"; }
-    private:
-        unsigned long m_lookuptable[16];
     };
-    
 }
 
-#endif /* CRC32_HPP */
+#endif /* EVENTARGS_HPP */
 

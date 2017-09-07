@@ -23,33 +23,39 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   physicaladdress.hpp
  * Author: annas
- * 
+ *
  * Created on 9. April 2017, 22:01
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef PHYSICALADDRESS_HPP
+#define PHYSICALADDRESS_HPP
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
+#include "../common.hpp"
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
+namespace std 
+{
+    namespace net 
+    {
+        class physicaladdress : public object  {
+        public:
+            physicaladdress();
+            physicaladdress(unsigned char *addr, int elements);
+            physicaladdress(const physicaladdress& orig);
+            virtual ~physicaladdress();
+            
+            
+        private:
+            unsigned char* m_cAddress;
+            int m_iElements;
+        };
+        class Mac48Address : public physicaladdress {
+        public:
+            Mac48Address(unsigned char* addr) : physicaladdress(addr, 6) {}
+            Mac48Address(const Mac48Address& orig) : physicaladdress(orig) {}
+        };
     }
 }
+#endif /* PHYSICALADDRESS_HPP */
+

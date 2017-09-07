@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 annas.
+ * Copyright 2016 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,32 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   fixed_sorted_vector.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 7. November 2016, 23:38
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef _STD_FIXED_SORTED_VECTOR_H_
+#define _STD_FIXED_SORTED_VECTOR_H_
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
+#include "fixed_vector.hpp"
+#include "sorted_vector.hpp"
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
-    }
+namespace std
+{
+	template<typename TKey, typename TValue,  int TCapacity, bool TGrowOnOverflow, class TCompare = std::less<TKey>, class TAllocator = std::allocator>
+		class fixed_sorted_vector : public sorted_vector<TKey, TValue, TCompare, TAllocator, fixed_vector_storage<pair<TKey, TValue>, TAllocator, TCapacity, TGrowOnOverflow> >
+	{
+	public:
+		explicit fixed_sorted_vector(const allocator_type& allocator = allocator_type())
+			: sorted_vector(allocator)
+		{
+		}
+	};
 }
+
+
+#endif 
+
+

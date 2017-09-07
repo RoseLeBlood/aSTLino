@@ -23,47 +23,25 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   fixed_array.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 7. November 2016, 23:22
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
-namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
-    public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
-        }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
-        }
-        const char* get_name() { return "crc16"; }
-    private:
-        unsigned long m_lookuptable[16];
-    };
-    
-}
+#ifndef _STL_FIXED_ARRAY_H
+#define _STL_FIXED_ARRAY_H
+#include "array.hpp"
 
-#endif /* CRC32_HPP */
+namespace std {
+    template <typename T, size_t N>
+    class fixed_array : array<T, N> {
+    public:
+        fixed_array() : array() { }
+	fixed_array(const T a[N]) : array(a) {}  
+    };
+}
+#endif 
+
+
 

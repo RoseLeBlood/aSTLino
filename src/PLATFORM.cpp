@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-#include "include/common.hpp"
+#include "common.hpp"
 
 
 #include <Arduino.h>

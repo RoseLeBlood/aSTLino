@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 annas.
+ * Copyright 2016 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,35 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   vector_util.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 8. November 2016, 14:31
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef __STL__UTIL_HPP__
+#define __STL__UTIL_HPP__
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
+#include "vector.hpp"
+#include "sstream.hpp"
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
+
+    template< typename T > std::string str(T begin, T end)
+    {
+        std::stringstream ss;
+        bool first = true;
+        for (; begin != end; begin++)
+        {
+            if (!first)
+                ss << ", ";
+            ss << *begin;
+            first = false;
         }
-        
-        
+        return ss.str();
     }
-}
+
+
+
+
+#endif /* VECTOR_UTIL_HPP */
+

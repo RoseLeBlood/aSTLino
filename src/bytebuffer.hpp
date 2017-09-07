@@ -23,33 +23,16 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   bytebuffer.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 9. April 2017, 23:25
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef BYTEBUFFER_HPP
+#define BYTEBUFFER_HPP
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
-        }
-        
-        
-    }
-}
+
+#endif /* BYTEBUFFER_HPP */
+

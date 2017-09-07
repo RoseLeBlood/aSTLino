@@ -23,47 +23,45 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   lock.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 8. November 2016, 00:08
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
-namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
-    public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
-        }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
-        }
-        const char* get_name() { return "crc16"; }
-    private:
-        unsigned long m_lookuptable[16];
-    };
-    
-}
+#ifndef __STL_HPP_LOCKED__
+#define __STL_HPP_LOCKED__
+/*
+#include "lock_base.hpp"
+#include "common.hpp"
 
-#endif /* CRC32_HPP */
+
+namespace std
+{
+    class mutex : public lock_base
+    {
+    public:
+        using native_handle_type = Sys::mutex_type*;
+        
+        mutex(Sys::mutex_init_t type = Sys::mutex_init_t::Default, 
+              bool shared = false, bool robust = false);
+        virtual ~mutex();
+        
+        void lock( void );
+        bool try_lock( void );
+	void unlock( void );
+           
+        native_handle_type native_handle();
+        
+        mutex& operator=(const mutex& m);
+        mutex(const mutex& m);
+    private:
+        native_handle_type _m_locked;
+    };
+   
+    
+    #define LOCK(m) if (std::lock_util<std::mutex> __csc = std::lock_util<std::mutex>(&m))
+}
+*/
+#endif
 

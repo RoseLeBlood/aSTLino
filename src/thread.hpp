@@ -23,47 +23,54 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   thread.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 14. November 2016, 21:47
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
-namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+#ifndef _STD_THREAD_HPP_
+#define _STD_THREAD_HPP_
+
+#include "common.hpp"
+#include "auto_ptr.hpp"
+
+typedef void  (*thread_func) ( void* arg);
+
+#include <pthread.h>
+namespace std
+{
+    typedef pthread_t native_thread_handle;
+    class thread 
+    {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
-        }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
-        }
-        const char* get_name() { return "crc16"; }
+	thread();
+	thread(thread_func lpExternalRoutine);
+	~thread();
+
+	int start(void* arg = NULL);
+        int exit();
+        int join();
+        
+        uint64_t  get_pid();
+        uint32_t get_retCode() { return m_errorCode; }
+	void attach(thread_func lpThreadStartRoutine );
+	void detach(void);
+        
+        const native_thread_handle handle() { return m_ThreadCtx; }
+        
+        static void sleep(long ms);
+    protected:
+	static void* EntryPoint( void* pArg);
+
+	virtual int Run( void*  arg  );
     private:
-        unsigned long m_lookuptable[16];
+	native_thread_handle m_ThreadCtx;
+        void* m_pUserdata;
+        uint32_t m_errorCode;
+	thread_func	m_pThreadStartRoutine;
     };
-    
 }
 
-#endif /* CRC32_HPP */
+#endif /* THREAD_HPP */
 

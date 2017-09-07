@@ -23,44 +23,48 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   crc32.hpp
  * Author: annas
  *
  * Created on 4. Dezember 2016, 21:05
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
+#ifndef CRC32_HPP
+#define CRC32_HPP
       
 namespace std {
     
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+    template <uint32_t poly, uint32_t Tint = 0xFFFFFFFF>
+    class crc32 {
     public:
         static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
+        crc32() {
+            createTable();
         }
         uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
            
             uint32_t crc = oldcrc;
             unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
+
+            for(uint32_t i = 0; i < length; i++) {                
+                crc = m_lookuptable[(crc ^ current[i]) & 0x0F] ^ (crc >> 4);
+                crc = m_lookuptable[(crc ^ (current[i] >> 4)) & 0x0F] ^ (crc >> 4);
+            }
+
+            return crc; 
         }
-        const char* get_name() { return "crc16"; }
+         const char* get_name() { return "crc32"; }
     private:
-        unsigned long m_lookuptable[16];
+         void createTable() {
+            for (unsigned int i = 0; i < 256; i++) {
+                uint32_t crc = i;
+                for (unsigned int j = 0; j < 8; j++)
+                    crc = (crc>>1) ^ (poly & (-(int)(crc & 1)));
+                m_lookuptable[i] = crc;
+            }
+        }
+    private:
+        uint32_t m_lookuptable[256];
     };
     
 }

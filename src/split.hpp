@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 annas.
+ * Copyright 2016 annas.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,45 @@
  */
 
 /* 
- * File:   physicaladdress.cpp
+ * File:   split.hpp
  * Author: annas
- * 
- * Created on 9. April 2017, 22:01
+ *
+ * Created on 7. November 2016, 23:41
  */
 
-#include "network/physicaladdress.hpp"
-#include "common.hpp"
+#ifndef __SPLIT_H
+#define __SPLIT_H
 
-namespace std {
-    namespace net {
-   
-        physicaladdress::physicaladdress(unsigned char *addr, int elements) {
-            m_iElements = elements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
-        }
-        physicaladdress::physicaladdress(const physicaladdress& orig) {
-            m_iElements = orig.m_iElements;
-            m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
-            std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
-        }
+// functions to split a string by a specific delimiter
+#include "string.hpp"
+#include "vector.hpp"
+#include <string.h>
 
-        physicaladdress::~physicaladdress() {
-            std::Sys::mFree(m_cAddress);
+namespace std
+{
+	template<typename T, class StringT>
+	inline void tokenize(T* s, T delim, std::vector<StringT>& container)
+	{
+		const T *olds = s;
+		T olddelim = delim;
+
+		while(olddelim && *s) 
+		{
+			while(*s && (delim != *s)) s++;
+			*s ^= olddelim = *s; 
+			container.push_back(StringT(olds));
+			*s++ ^= olddelim; 
+			olds = s;
+		}
+	}
+        inline std::vector<std::string> split(std::string&  strString, const char*  delimiter) {
+            std::vector<std::string> container;
+		tokenize<char, std::string>
+			((char*)strString.c_str(), delimiter[0], container);
+		return container;
         }
-        
-        
-    }
 }
+
+#endif
+
+

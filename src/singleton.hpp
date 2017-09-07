@@ -23,47 +23,48 @@
  */
 
 /* 
- * File:   crc16.hpp
+ * File:   singleton.hpp
  * Author: annas
  *
- * Created on 4. Dezember 2016, 21:05
+ * Created on 9. November 2016, 00:21
  */
 
-#ifndef CRC16_HPP
-#define CRC16_HPP
-      
-namespace std {
-    
-    template <uint32_t POLY = 0xA001, uint32_t Tint = 0x90F1>
-    class crc16 {
+#ifndef SINGLETON_HPP
+#define SINGLETON_HPP
+
+#include "auto_ptr.hpp"
+
+namespace std
+{
+    template < typename T > 
+    class singleton
+    {
     public:
-        static constexpr uint32_t default_value = Tint;
-        crc16() {
-          
-        }
-        uint32_t hash(const void* data, size_t length, uint32_t oldcrc = Tint) {
-           
-            uint32_t crc = oldcrc;
-            unsigned char* current = (unsigned char*) data;
-            while (length--) {
-        	crc ^= *current++;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-        	crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
-             }
-    	     return crc;
-        }
-        const char* get_name() { return "crc16"; }
+        using value_type = T;
+        
+        static value_type& get()
+        {
+            if( m_ptr.get() == 0 )
+            {
+                m_ptr.reset( new value_type() );
+            }
+            return *m_ptr;
+        } 
+    public:
+        singleton() {}
+        
+      
     private:
-        unsigned long m_lookuptable[16];
+        singleton(singleton const&)       = delete;
+        void operator=(singleton const&)  = delete;
+
+    private:
+        static std::auto_ptr<T> m_ptr;   
     };
-    
+    template < typename T > 
+    std::auto_ptr<T> singleton<T>::m_ptr = std::auto_ptr<T>(0);
 }
 
-#endif /* CRC32_HPP */
+
+#endif /* SINGLETON_HPP */
 
