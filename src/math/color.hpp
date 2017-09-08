@@ -76,7 +76,7 @@ namespace std
 	    color(const int _r, const int _g, const int _b) : r((T)(_r) * colorcon), g((T)(_g) * colorcon), b((T)(_b) * colorcon), a(1.0f)														{}
 	    color(const int _r, const int _g, const int _b, const int _a) : r((T)(_r) * colorcon), g((T)(_g) * colorcon), b((T)(_b) * colorcon), a((T)(_a) * colorcon)					{}
 	    color(const int* pComponent) : r((T)(pComponent[0]) * colorcon), g((T)(pComponent[1]) * colorcon), b((T)(pComponent[2]) * colorcon), a((T)(pComponent[3]) * colorcon)		{}
-	    color(const int c) : r(colorcon * (T)(c >> 16)), g(colorcon * (T)(c >> 8)), b(colorcon * (T)(c)), a(colorcon * (T)(c >> 24))							{}
+	    color(const unsigned long c) : r(colorcon * (T)(c >> 16)), g(colorcon * (T)(c >> 8)), b(colorcon * (T)(c)), a(colorcon * (T)(c >> 24))							{}
 
 	    operator unsigned long () const
 	    {

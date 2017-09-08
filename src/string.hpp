@@ -174,7 +174,17 @@ namespace std
         template<typename E = char, class TAllocator, typename TStorage>
         inline std::basic_string<E, TAllocator, TStorage> to_string(const void* v, flags_t f = flags_t::dec  ) {   
             return std::frmstring("%p", v ); }
+   
+	template<typename T, typename E = char, class TAllocator = std::allocator, typename TStorage = std::simple_string_storage<E, TAllocator> >
+	inline std::basic_string<E, TAllocator, TStorage> operator << (std::basic_string<E, TAllocator, TStorage> s, T value) {
+  		char buf[24]; int len = sprintf(buf, "%d", value);
+  		return s << std::basic_string<E, TAllocator, TStorage>(buf, len);
+	}
+
+
 }
+
+
 
 #endif 
 

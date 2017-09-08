@@ -54,8 +54,17 @@ namespace std
             	return this != next; 
             }
 
-            void link_after(slist_base_node* prevNode);
-            void unlink(slist_base_node* prevNode);
+            void link_after(slist_base_node* prevNode) {
+                assert(!in_list());
+                next = prevNode->next;
+                prevNode->next = this;
+            }
+            void unlink(slist_base_node* prevNode) {
+               assert(in_list());
+               assert(prevNode->next == this);
+               prevNode->next = next;
+               next = this;
+            }
 
             slist_base_node*        next;
 	    };

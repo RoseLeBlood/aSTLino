@@ -129,13 +129,14 @@ namespace std
 	    }
 
 	    size_type size() const {
-               size_type numNodes(0);
-               const intrusive_list_node* iter = &m_root;
-               do {
-                  iter = iter->next;
-                  ++numNodes;
-               } while (iter != &m_root);
-               return numNodes - 1;
+              	size_type numNodes(0);
+        	const intrusive_list_node* iter = &m_root;
+              	do
+        	{
+            		iter = iter->next;
+            		++numNodes;
+        	} while (iter != &m_root);
+        	return numNodes - 1;
             }
 	    bool empty() const      
 	    { 
@@ -146,17 +147,17 @@ namespace std
             ~intrusive_list_base() {}
 
             static void link(intrusive_list_node* node, intrusive_list_node* nextNode) {
-                 assert(!node->in_list());
-                 node->prev = nextNode->prev;
-                 node->prev->next = node;
-                 nextNode->prev = node;
-                 node->next = nextNode;
+		assert(!node->in_list());
+        	node->prev = nextNode->prev;
+        	node->prev->next = node;
+        	nextNode->prev = node;
+        	node->next = nextNode;
             }
             static void unlink(intrusive_list_node* node) {
-                  assert(node->in_list());
-                  node->prev->next = node->next;
-                  node->next->prev = node->prev;
-                  node->next = node->prev = node;
+		assert(node->in_list());
+        	node->prev->next = node->next;
+        	node->next->prev = node->prev;
+        	node->next = node->prev = node;
             }
             protected:
                     intrusive_list_node     m_root;

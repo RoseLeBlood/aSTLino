@@ -40,10 +40,18 @@ namespace std
     {
         class physicaladdress : public object  {
         public:
-            physicaladdress();
-            physicaladdress(unsigned char *addr, int elements);
-            physicaladdress(const physicaladdress& orig);
-            virtual ~physicaladdress();
+            physicaladdress() { }
+            physicaladdress(unsigned char *addr, int elements) {
+              m_iElements = elements;
+              m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
+              std::Sys::MemCpy(this->m_cAddress, addr, m_iElements);
+            }
+            physicaladdress(const physicaladdress& orig) {
+             	m_iElements = orig.m_iElements;
+            	m_cAddress = std::Sys::mAllocE<unsigned char>(m_iElements);
+            	std::Sys::MemCpy(this->m_cAddress, orig.m_cAddress, m_iElements);
+            }
+            virtual ~physicaladdress() { free(m_cAddress); }
             
             
         private:

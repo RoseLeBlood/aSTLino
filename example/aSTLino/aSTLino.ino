@@ -1,8 +1,8 @@
-#include "include/string.hpp"
-#include "include/stl.hpp"
+#include <aSTLino.h>
 
-#include "include/math/matrix4x4.hpp"
-#include "include/event.hpp"
+#include <string.hpp>
+#include <math/matrix4x4.hpp>
+#include <event.hpp>
 
 class serverEventArgs : public std::eventArgs {
 public:
