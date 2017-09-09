@@ -185,6 +185,34 @@ namespace std
 
             return raColor(v, p, q);
         }
+        template <typename T> 
+        color<T> from_kelvin(const long k) {
+			double r, g, b;
+			long temp = k / 100;
+			if(temp <= 60) 
+				r = 255;
+			else {
+				r = (T)(329.698727446 * pow( (temp - 60), -0.1332047592 ));
+			}
+			if(temp <=66) {
+				g = 99.4708025861 * log(temp) - 161.1195681661;
+			} else {
+				g = 288.12221695283 * pow( (temp - 60), -0.0755148492);
+			}
+			if(temp >= 66) {
+				b = 255;
+			} else if (temp <= 19) {
+				b = 0;
+			} else {
+				b = 138.5177312231 * log(temp - 10) - 305.0447927307;
+			}
+			r = (r < 0) ? 0 : (r > 255) ? 255 : r;
+			g = (g < 0) ? 0 : (g > 255) ? 255 : g;
+			b = (b < 0) ? 0 : (b > 255) ? 255 : b;
+
+			return color<T>((int)r, (int)g, (int)b);
+			
+        }
     }
 }
 

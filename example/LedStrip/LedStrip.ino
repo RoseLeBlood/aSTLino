@@ -15,9 +15,9 @@ void setup() {
 void loop() {
    
    while (Serial.available() ) {
-   int red = Serial.parseInt(); if(red > 255) red = 255;
-   int green = Serial.parseInt(); if(green > 255) green = 255;
-   int blue = Serial.parseInt(); if(blue > 255) blue = 255;
+   int red = Serial.parseInt(); red = (red >255) ? 255 : (red < 0) ? 0 : red;
+   int green = Serial.parseInt(); green = (green >255) ? 255 : (green < 0) ? 0 : green;
+   int blue = Serial.parseInt(); blue = (blue >255) ? 255 : (blue < 0) ? 0 : blue;
 
     std::math::colf c = std::math::colf(red,green,blue);
     //Serial << "r:" << c.r << "f g:" << c.g <<"f b:"<<c.b  << "f" << endl;

@@ -21,8 +21,9 @@
         
         virtual void begin()   { pinMode(TPin, TMode); }
         int  read()            { return digitalRead(TPin);  }
-        void write(int state, bool)  { digitalWrite(TPin, state); }  
-        void write(float f, bool)    { digitalWrite(TPin, f == 1.0f ); }
+        void write(int state, bool b = false)  { digitalWrite(TPin, state); }  
+        void write(bool state, bool b = false) { digitalWrite(TPin, state); }  
+        void write(float f, bool b = false)    { digitalWrite(TPin, f == 1.0f ); }
 
         template<typename E = char, class TAllocator = std::allocator, typename TStorage = std::simple_string_storage<E, TAllocator> >
             std::basic_string<E, TAllocator, TStorage> to_string() {   
