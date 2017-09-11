@@ -1,28 +1,46 @@
 #include <aSTLino.h>
 #include <arduino/rgb_strip.hpp>
 #include <arduino/stream.hpp>
+#include <math/vector3.hpp>
+#include <arduino/eeprom.hpp>
+
+//#define EEPROM_CLEAR 0
 
 arduino::rgb_strip<5,6,3, false> ledstrip; // pin, pin, pin, invert?
-
+arduino::digitalOut<13> led;
+  
 void setup() {
+  Serial.begin(9600); 
+  #ifdef EEPROM_CLEAR 
+    arduino::eeprom::clear(); while(true) {}
+    arduino::eeprom::write(std::math::color<float>(0,0,255,128), 1);
+  #endif
+  
+  led.begin();
   ledstrip.begin();
-  ledstrip.color(0,0,0);
 
-  Serial.begin(9600);
-  Serial << "LED Strip Demo - Example input \"52 41 78\"" << endl;
+  std::math::color<float> f;
+  arduino::eeprom::read(f, 1);
+  
+  ledstrip.color(f);
+ 
 }
-
 void loop() {
-   
+   led.write(false);
    while (Serial.available() ) {
-   int red = Serial.parseInt(); red = (red >255) ? 255 : (red < 0) ? 0 : red;
-   int green = Serial.parseInt(); green = (green >255) ? 255 : (green < 0) ? 0 : green;
-   int blue = Serial.parseInt(); blue = (blue >255) ? 255 : (blue < 0) ? 0 : blue;
-
-    std::math::colf c = std::math::colf(red,green,blue);
-    //Serial << "r:" << c.r << "f g:" << c.g <<"f b:"<<c.b  << "f" << endl;
+     led.write(true);
      
-    ledstrip.color(c);
-     Serial << ledstrip.to_string() << endl;
-   }  
-}
+     int r = Serial.parseInt(); r = (r >255) ? 255 : (r < 0) ? 0 : r;
+     int g = Serial.parseInt(); g = (g >255) ? 255 : (g < 0) ? 0 : g;
+     int b = Serial.parseInt(); b = (b >255) ? 255 : (b < 0) ? 0 : b;
+     int a = Serial.parseInt(); a = (a >255) ? 255 : (a < 0) ? 0 : a;
+
+     ledstrip.fade_color(std::math::color<float>(r, g, b, a), 0.1f, 150);
+     
+     arduino::eeprom::write(ledstrip.color(), 1);
+     Serial << ledstrip.to_string() << endl; 
+   }
+}  
+
+
+
