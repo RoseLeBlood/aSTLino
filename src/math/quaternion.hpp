@@ -116,7 +116,7 @@ namespace std
             { return ((a.v > b.v) && (a.s > b.s)); }
          
         template <typename T> 
-	inline quaternion identy()														
+	inline quaternion<T> identy()														
             { return quaternion<T>(1.0f, 0.0f, 0.0f, 0.0f); }
         template <typename T> 
 	inline T lenght(const quaternion<T>& v)											
@@ -223,22 +223,22 @@ namespace std
         }
 
         template <typename T>
-        inline quaternion<T> raQuaternionSin(const quaternion<T> &q) {
+        inline quaternion<T> sin(const quaternion<T> &q) {
             quaternion<T> s;
 
-            for( float n = 0; n < 6.0f; n++ )
-		s += pow( -1.0f ,n ) * (power( q , 2.0f * n + 1.0f ) ) /
-                        ( factorial<T>( 2.0f * n + 1.0f ) );
+            for( T n = 0; n < (T)6.0; n++ )
+		        s += (T)(::pow( -1.0 ,(double)n ) * (power( q , 2.0f * n + 1.0f ) ) /
+                        ( factorial<T>( 2.0f * n + 1.0f ) ));
 
             return s ;
         }
 
         template <typename T>
-        inline quaternion<T> raQuaternionCos(const quaternion<T> &q) {
+        inline quaternion<T> cos(const quaternion<T> &q) {
             quaternion<T> s;
 
             for( T n = 1.0f; n <= 6.0f; n++ )
-		s += pow( -1.0f ,n ) * power( q , 2.0f * n ) /
+		s += ::pow( -1.0f ,n ) * power( q , 2.0f * n ) /
                         factorial<T>( 2.0f * n ) ;
 
             return s ;
@@ -309,7 +309,7 @@ namespace std
             return normalize(temp);
         }
         template <typename T> 
-        quaternion::quaternion(const vector3<value_type> &axis) {
+        quaternion<T>::quaternion(const vector3<value_type> &axis) {
             value_type cos_z_2 = (value_type)cos(0.5*axis.z);
             value_type cos_y_2 = (value_type)cos(0.5*axis.y);
             value_type cos_x_2 = (value_type)cos(0.5*axis.x);
@@ -325,7 +325,7 @@ namespace std
             v.z = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
         }
         template <typename T>
-        quaternion<T>& quaternion::operator /= (const quaternion<T>& q) {
+        quaternion<T>& quaternion<T>::operator /= (const quaternion<T>& q) {
             (* this) *= invert(q); return *this;
         }
 
