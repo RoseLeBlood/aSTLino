@@ -15,7 +15,21 @@ namespace arduino {
     Current,//
     Color
   };
-
+  struct sensor_vector {
+	  union {
+        struct {
+          float Roll;
+          float Pitch;
+          float Heading;
+        };
+        struct {
+          float x;
+          float y;
+          float z;
+        };
+        std::math::vector3<float> xyz;
+      }
+  };
   class isensor {
     public:
       isensor() { }
@@ -23,7 +37,7 @@ namespace arduino {
       virtual void begin()  { }
       virtual void update() { }
       
-      virtual void delay()      { delay(m_iDelay); }
+      virtual void sensor_delay()      { delay(m_iDelay); }
       
       std::string  getName()    { return m_strName; }
       int32_t      getVersion() { return m_iVersion; }
@@ -39,7 +53,7 @@ namespace arduino {
       void setType(sensor_type t)               { m_eType = t; }
       void setMinMaxValue(float min, float max) { m_fMinValue = min; m_fMaxValue = max; }
       void setResolution(float resolution)      { m_fResolution = resolution; }
-      void setDelay(int32_t delay)              { m_iDelay = delay); }
+      void setDelay(int32_t delay)              { m_iDelay = delay; }
     private:
       std::string   m_strName;
       int32_t       m_iVersion;

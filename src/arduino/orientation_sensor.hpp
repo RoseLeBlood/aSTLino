@@ -6,23 +6,12 @@
 namespace arduino {
   class orientation_sensor : public isensor {
     public:
-      union {
-        struct {
-          float Roll;
-          float Pitch;
-          float Heading;
-        };
-        struct {
-          float x;
-          float y;
-          float z;
-        };
-        std::math::vector3<float> xyz;
-      }
       orientation_sensor() {
         setType(sensor_type::Orientation);
       }
-     
+      sensor_vector& orientation() const { return m_orientation; }
+    protected:
+		sensor_vector m_orientation;
   };
 }
 

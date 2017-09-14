@@ -308,6 +308,23 @@ namespace std
             }
             return normalize(temp);
         }
+		template <typename T>
+        inline quaternion<T> quaternion_from(T yaw, T pitch, T roll) {
+			quaternion<T> q;
+			// Abbreviations for the various angular functions
+			double cy = cos(yaw * 0.5);
+			double sy = sin(yaw * 0.5);
+			double cr = cos(roll * 0.5);
+			double sr = sin(roll * 0.5);
+			double cp = cos(pitch * 0.5);
+			double sp = sin(pitch * 0.5);
+
+			return quaternion<T>(cy * cr * cp + sy * sr * sp,
+								 cy * sr * cp - sy * cr * sp,
+			                     cy * cr * sp + sy * sr * cp,
+			                     sy * cr * cp - cy * sr * sp);
+
+		}
         template <typename T> 
         quaternion<T>::quaternion(const vector3<value_type> &axis) {
             value_type cos_z_2 = (value_type)cos(0.5*axis.z);

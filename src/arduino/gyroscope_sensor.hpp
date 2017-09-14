@@ -6,23 +6,13 @@
 namespace arduino {
   class gyroscope_sensor : public isensor {
     public:
-      union {
-        struct {
-          float Roll;
-          float Pitch;
-          float Heading;
-        };
-        struct {
-          float x;
-          float y;
-          float z;
-        };
-        std::math::vector3<float> xyz;
-      }
+      
       gyroscope_sensor () {
         setType(sensor_type::GyroScope);
       }
-     
+	  sensor_vector& gyro() const { return m_gyro; }
+    protected:
+		sensor_vector m_gyro;
   };
 }
 

@@ -6,23 +6,13 @@
 namespace arduino {
   class magnetic_sensor : public isensor {
     public:
-      union {
-        struct {
-          float Roll;
-          float Pitch;
-          float Heading;
-        };
-        struct {
-          float x;
-          float y;
-          float z;
-        };
-        std::math::vector3<float> xyz;
-      }
       magnetic_sensor() {
         setType(sensor_type::MagneticField);
       }
-     
+      sensor_vector& mag() const { return m_mag; }
+	
+    protected:
+		sensor_vector m_mag; 
   };
 }
 
