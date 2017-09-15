@@ -3,17 +3,17 @@
 
 namespace arduino {
   enum class sensor_type {
-    Accelerator, //
-    MagneticField,//
-    Orientation,//
-    GyroScope,//
-    Light,//
-    Distance,//
-    LineareAcceleration,//
-    Temperatur,//
-    Voltage,//
-    Current,//
-    Color
+    Accelerator = 1, //
+    MagneticField = 2,//
+    Orientation = 4,//
+    GyroScope = 8,//
+    Light = 16,//
+    Distance = 32,//
+    LineareAcceleration = 64,//
+    Temperatur = 128,//
+    Voltage = 256,//
+    Current = 512,//
+    Color = 1024
   };
   struct sensor_vector {
 	  union {
@@ -28,7 +28,7 @@ namespace arduino {
           float z;
         };
         std::math::vector3<float> xyz;
-      }
+      };
   };
   class isensor {
     public:
@@ -40,7 +40,6 @@ namespace arduino {
       virtual void sensor_delay()      { delay(m_iDelay); }
       
       std::string  getName()    { return m_strName; }
-      int32_t      getVersion() { return m_iVersion; }
       int32_t      getID()      { return m_iId; }
       sensor_type  getType()    { return m_eType; }
       float        getMinValue(){ return m_fMinValue; }
@@ -48,7 +47,6 @@ namespace arduino {
       float        getResolution() { return m_fResolution; }
     protected:
       void setName(std::string name)            { m_strName = name; }
-      void setVersion(int32_t version)          { m_iVersion = version; }
       void setId(int32_t id)                    { m_iId = id; }
       void setType(sensor_type t)               { m_eType = t; }
       void setMinMaxValue(float min, float max) { m_fMinValue = min; m_fMaxValue = max; }
@@ -56,7 +54,6 @@ namespace arduino {
       void setDelay(int32_t delay)              { m_iDelay = delay; }
     private:
       std::string   m_strName;
-      int32_t       m_iVersion;
       int32_t       m_iId;
       sensor_type   m_eType;
       float         m_fMinValue;
