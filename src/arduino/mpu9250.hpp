@@ -1,9 +1,7 @@
 #ifndef __ASTL_ARDUINO_MPU9250_HPP__
 #define __ASTL_ARDUINO_MPU9250_HPP__
 
-#include "magnetic_sensor.hpp"
-#include "accelerator_sensor.hpp"
-#include "gyroscope_sensor.hpp"
+#include "sensor_interface.hpp"
 
 #include<Wire.h>
 
@@ -21,12 +19,12 @@
 #define    ACC_FULL_SCALE_16_G       0x18
 
 namespace arduino {
-  class mpu9250_sensor : public magnetic_sensor, public accelerator_sensor, public gyroscope_sensor {
+  class mpu9250_sensor : public isensor {
     public:
       mpu9250_sensor(uint32_t addrs = MPU9250_ADDRESS) { 
         setName(std::string("MPU9250"));
         setID(addrs);
-        setType(sensor_type::GyroScope | sensor_type::MagneticField | sensor_type::Accelerator);
+        setType((int)sensor_type::GyroScope | (int)sensor_type::MagneticField | (int)sensor_type::Accelerator);
        
       }
       virtual void begin()  { 
@@ -68,6 +66,11 @@ namespace arduino {
         m_mag.y = -(Mag[1]<<8 | Mag[0]);
         m_mag.z = -(Mag[5]<<8 | Mag[4]);
       }
+	  std::math::vector3<float> mag() const { return m_mag; }
+	  std::math::vector3<float> gyro() const { return m_gyro; }
+	  std::math::vector3<float> accel() const { return m_accel; }
+	private:
+	  std::math::vector3<float> m_accel, m_gyro, m_mag;
     protected: 
       uint8_t read(uint8_t Address, uint8_t Register, uint8_t Nbytes, uint8_t* Data) {
         Wire.beginTransmission(Address);
